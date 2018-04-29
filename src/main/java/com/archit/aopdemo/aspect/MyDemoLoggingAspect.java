@@ -14,8 +14,11 @@ public class MyDemoLoggingAspect {
     /*@Before("execution(public void addAccount())")*/
 
     // @Before advice : pointcut expression : match on specific class method
-    @Before("execution(public void com.archit.aopdemo.dao.AccountDAO" +
-            ".addAccount())")
+    /*@Before("execution(public void com.archit.aopdemo.dao.AccountDAO" +
+            ".addAccount())")*/
+
+    // @Before advice : pointcut expression : match on any class with wildcard method
+    @Before("execution(public void add*())")
     public void beforeAddAccountAdvice() {
         System.out.println("\n====>>>> executing @Before advice on addAccount" +
                 "()");
