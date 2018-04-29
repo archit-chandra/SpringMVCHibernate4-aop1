@@ -2,11 +2,14 @@ package com.archit.aopdemo.aspect;
 
 import com.archit.aopdemo.Account;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Aspect
 @Component
@@ -51,5 +54,21 @@ public class MyDemoLoggingAspect {
                 System.out.println("account level: " + account.getLevel());
             }
         }
+    }
+
+    // @AfterReturning advice on findAccounts method
+    @AfterReturning(
+            pointcut = "execution(* com.archit.aopdemo.dao.AccountDAO.findAccounts(..))",
+            returning = "result")
+    public void afterReturningFindAccountsAdvice(JoinPoint joinPoint,
+                                                 List<Account> result) {
+
+        // print the method that is being advised
+        String method = joinPoint.getSignature().toShortString();
+        System.out.println("\n====>>>> executing @AfterReturning on method : " +
+                "" + method);
+
+        // print result of the method call
+        System.out.println("\n====>>>> result is : " + result);
     }
 }
