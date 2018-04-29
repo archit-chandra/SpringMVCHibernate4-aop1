@@ -1,6 +1,7 @@
 package com.archit.aopdemo;
 
 import com.archit.aopdemo.dao.AccountDAO;
+import com.archit.aopdemo.dao.MembershipDAO;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class MainDemoApp {
@@ -13,13 +14,22 @@ public class MainDemoApp {
 
         // get the bean from spring container
         AccountDAO accountDAO = context.getBean("accountDAO", AccountDAO.class);
+        MembershipDAO membershipDAO = context.getBean("membershipDAO",
+                MembershipDAO.class);
 
-        // call the business method
-        accountDAO.addAccount();
+        // call the accountDAO business method
+        /*accountDAO.addAccount();*/
 
-        // calling it again : fun testing
-        System.out.println("\nLets do it again\n");
-        accountDAO.addAccount();
+        /*Account account = new Account();
+        accountDAO.addAccount(account);*/
+
+        Account account = new Account();
+        accountDAO.addAccount(account, true);
+        accountDAO.doWork();
+
+        // call the membershipDAO business method
+        membershipDAO.addAccount();
+        membershipDAO.goToSleep();
 
         // close the context
         context.close();
