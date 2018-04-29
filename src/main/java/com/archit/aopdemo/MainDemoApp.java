@@ -20,8 +20,11 @@ public class MainDemoApp {
         // call the accountDAO business method
         /*accountDAO.addAccount();*/
 
+        /*Account account = new Account();
+        accountDAO.addAccount(account);*/
+
         Account account = new Account();
-        accountDAO.addAccount(account);
+        accountDAO.addAccount(account, true);
 
         // call the membershipDAO business method
         membershipDAO.addAccount();
