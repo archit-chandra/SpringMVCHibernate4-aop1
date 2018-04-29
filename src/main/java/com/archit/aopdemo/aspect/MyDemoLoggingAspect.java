@@ -1,7 +1,10 @@
 package com.archit.aopdemo.aspect;
 
+import com.archit.aopdemo.Account;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +31,25 @@ public class MyDemoLoggingAspect {
     // @Before advice : pointcut expression : match method in a package
     @Before("com.archit.aopdemo.aspect.CommonAopPointcutExpressions" +
             ".forDaoPackageNoGetterSetter()")
-    public void beforeAddAccountAdvice() {
+    public void beforeAddAccountAdvice(JoinPoint joinPoint) {
         System.out.println("\n====>>>> executing @Before advice on method");
+
+        // display method signature
+        MethodSignature methodSignature = (MethodSignature) joinPoint
+                .getSignature();
+        System.out.println("MethodSignature :" + methodSignature);
+
+        // display method arguments
+        Object[] args = joinPoint.getArgs();
+        for (Object arg : args) {
+            System.out.println(arg);
+            if (arg instanceof Account) {
+                // downcast and print Account specific stuff
+                // since not overridden toString here
+                Account account = (Account) arg;
+                System.out.println("account name: " + account.getName());
+                System.out.println("account level: " + account.getLevel());
+            }
+        }
     }
 }

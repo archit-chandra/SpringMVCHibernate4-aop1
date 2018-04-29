@@ -18,7 +18,7 @@ public class MainDemoApp {
                 MembershipDAO.class);
 
         // call the DAO beans business method(s)
-        Account account = new Account();
+        Account account = new Account("Madhu", "Platinum");
         accountDAO.addAccount(account, true);
         accountDAO.doWork();
 
