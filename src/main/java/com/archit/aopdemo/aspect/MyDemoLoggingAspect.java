@@ -10,8 +10,12 @@ public class MyDemoLoggingAspect {
 
     // add all advices for logging
 
-    // @Before advice
-    @Before("execution(public void addAccount())")
+    // @Before advice : pointcut expression : match on any class method
+    /*@Before("execution(public void addAccount())")*/
+
+    // @Before advice : pointcut expression : match on specific class method
+    @Before("execution(public void com.archit.aopdemo.dao.AccountDAO" +
+            ".addAccount())")
     public void beforeAddAccountAdvice() {
         System.out.println("\n====>>>> executing @Before advice on addAccount" +
                 "()");
