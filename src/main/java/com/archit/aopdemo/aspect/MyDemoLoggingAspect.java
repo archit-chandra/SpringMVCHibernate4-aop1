@@ -22,28 +22,6 @@ public class MyDemoLoggingAspect {
 
     // add all advices for logging
 
-    // @Before advice : pointcut expression : match on any class method
-    /*@Before("execution(public void addAccount())")*/
-
-    // @Before advice : pointcut expression : match on specific class method
-    /*@Before("execution(public void com.archit.aopdemo.dao.AccountDAO" +
-            ".addAccount())")*/
-
-    // @Before advice : pointcut expression : match on any class with wildcard method
-    /*@Before("execution(public void add*())")*/
-
-    // @Before advice : pointcut expression : match method with any return type
-    /*@Before("execution(* add*())")*/
-
-    // @Before advice : pointcut expression : match method with Account param
-    //@Before("execution(* add*(com.archit.aopdemo.Account))")
-
-    // @Before advice : pointcut expression : match method with Account param + more parameter types
-    //@Before("execution(* add*(com.archit.aopdemo.Account, ..))")
-
-    // @Before advice : pointcut expression : match method with any parameter
-    //@Before("execution(* add*(..))")
-
     // @Before advice : pointcut expression : match method in a package
     @Before("execution(* com.archit.aopdemo.dao.*.*(..))")
     public void beforeAddAccountAdvice() {
