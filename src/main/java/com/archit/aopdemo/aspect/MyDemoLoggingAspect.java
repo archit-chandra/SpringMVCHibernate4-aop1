@@ -13,6 +13,11 @@ public class MyDemoLoggingAspect {
      * execution (modifiers-pattern? return-type-pattern declaring-type-pattern? method-name-pattern(param-pattern) throws-pattern?)
      * ? => optional
      * pattern can use wildcards
+     * <p>
+     * Parameter pattern wildcards
+     * 1. ()   -> method with no parameter
+     * 2. (*)  -> method with one argument of any type
+     * 3. (..) -> method with 0 or more argument of any type
      */
 
     // add all advices for logging
@@ -28,7 +33,10 @@ public class MyDemoLoggingAspect {
     /*@Before("execution(public void add*())")*/
 
     // @Before advice : pointcut expression : match method with any return type
-    @Before("execution(* add*())")
+    /*@Before("execution(* add*())")*/
+
+    // @Before advice : pointcut expression : match method with Account param
+    @Before("execution(* add*(com.archit.aopdemo.Account))")
     public void beforeAddAccountAdvice() {
         System.out.println("\n====>>>> executing @Before advice on addAccount" +
                 "()");

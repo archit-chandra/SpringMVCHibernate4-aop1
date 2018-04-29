@@ -18,11 +18,10 @@ public class MainDemoApp {
                 MembershipDAO.class);
 
         // call the accountDAO business method
-        accountDAO.addAccount();
+        /*accountDAO.addAccount();*/
 
-        // calling it again : fun testing
-        System.out.println("\nLets do it again");
-        accountDAO.addAccount();
+        Account account = new Account();
+        accountDAO.addAccount(account);
 
         // call the membershipDAO business method
         membershipDAO.addAccount();
