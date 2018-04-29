@@ -2,6 +2,7 @@ package com.archit.aopdemo.aspect;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -20,34 +21,37 @@ public class MyDemoLoggingAspect {
      * 3. (..) -> method with 0 or more argument of any type
      */
 
+    // declaring pointcut(s)
+    @Pointcut("execution(* com.archit.aopdemo.dao.*.*(..))")
+    private void forDaoPackage() {
+    }
+
+    // create pointcut for getter methods
+    @Pointcut("execution(* com.archit.aopdemo.dao.*.get*(..))")
+    private void getter() {
+    }
+
+    // create pointcut for setter methods
+    @Pointcut("execution(* com.archit.aopdemo.dao.*.set*(..))")
+    private void setter() {
+    }
+
+    // create pointcut include package ... excude getter/setter
+    @Pointcut("forDaoPackage() && !(getter() || setter())")
+    private void forDaoPackageNoGetterSetter() {
+    }
+
+
     // add all advices for logging
 
-    // @Before advice : pointcut expression : match on any class method
-    /*@Before("execution(public void addAccount())")*/
-
-    // @Before advice : pointcut expression : match on specific class method
-    /*@Before("execution(public void com.archit.aopdemo.dao.AccountDAO" +
-            ".addAccount())")*/
-
-    // @Before advice : pointcut expression : match on any class with wildcard method
-    /*@Before("execution(public void add*())")*/
-
-    // @Before advice : pointcut expression : match method with any return type
-    /*@Before("execution(* add*())")*/
-
-    // @Before advice : pointcut expression : match method with Account param
-    //@Before("execution(* add*(com.archit.aopdemo.Account))")
-
-    // @Before advice : pointcut expression : match method with Account param + more parameter types
-    //@Before("execution(* add*(com.archit.aopdemo.Account, ..))")
-
-    // @Before advice : pointcut expression : match method with any parameter
-    //@Before("execution(* add*(..))")
-
     // @Before advice : pointcut expression : match method in a package
-    @Before("execution(* com.archit.aopdemo.dao.*.*(..))")
+    @Before("forDaoPackageNoGetterSetter()")
     public void beforeAddAccountAdvice() {
-        System.out.println("\n====>>>> executing @Before advice on addAccount" +
-                "()");
+        System.out.println("\n====>>>> executing @Before advice on method");
+    }
+
+    @Before("forDaoPackageNoGetterSetter()")
+    public void performApiAnalytics() {
+        System.out.println("\n====>>>> performing API analytics");
     }
 }

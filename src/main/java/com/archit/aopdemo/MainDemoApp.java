@@ -17,17 +17,19 @@ public class MainDemoApp {
         MembershipDAO membershipDAO = context.getBean("membershipDAO",
                 MembershipDAO.class);
 
-        // call the accountDAO business method
-        /*accountDAO.addAccount();*/
-
-        /*Account account = new Account();
-        accountDAO.addAccount(account);*/
-
+        // call the DAO beans business method(s)
         Account account = new Account();
         accountDAO.addAccount(account, true);
         accountDAO.doWork();
 
-        // call the membershipDAO business method
+        // call the AccountDAO getter/setter methods
+        accountDAO.setName("foobar");
+        accountDAO.setServiceCode("silver");
+
+        String name = accountDAO.getName();
+        String serviceCode = accountDAO.getServiceCode();
+
+        // call the MembershipDAO business method(s)
         membershipDAO.addAccount();
         membershipDAO.goToSleep();
 
