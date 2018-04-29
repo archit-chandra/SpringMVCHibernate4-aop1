@@ -3,6 +3,9 @@ package com.archit.aopdemo.dao;
 import com.archit.aopdemo.Account;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class AccountDAO {
 
@@ -17,6 +20,17 @@ public class AccountDAO {
     public boolean doWork() {
         System.out.println(getClass() + " : doWork()");
         return false;
+    }
+
+    public List<Account> findAccounts() {
+        List<Account> accounts = new ArrayList<Account>();
+        Account temp1 = new Account("John", "Silver");
+        Account temp2 = new Account("Madhu", "Platinum");
+        Account temp3 = new Account("Luca", "Gold");
+        accounts.add(temp1);
+        accounts.add(temp2);
+        accounts.add(temp3);
+        return accounts;
     }
 
     public String getName() {
