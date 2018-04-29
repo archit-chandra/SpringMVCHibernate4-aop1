@@ -42,7 +42,10 @@ public class MyDemoLoggingAspect {
     //@Before("execution(* add*(com.archit.aopdemo.Account, ..))")
 
     // @Before advice : pointcut expression : match method with any parameter
-    @Before("execution(* add*(..))")
+    //@Before("execution(* add*(..))")
+
+    // @Before advice : pointcut expression : match method in a package
+    @Before("execution(* com.archit.aopdemo.dao.*.*(..))")
     public void beforeAddAccountAdvice() {
         System.out.println("\n====>>>> executing @Before advice on addAccount" +
                 "()");

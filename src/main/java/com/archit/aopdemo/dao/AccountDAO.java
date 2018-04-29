@@ -19,4 +19,9 @@ public class AccountDAO {
         System.out.println(getClass() + " : doing my DB work - adding an " +
                 "account with Account parameter + vipFlag");
     }
+
+    public boolean doWork() {
+        System.out.println(getClass() + " : doWork()");
+        return false;
+    }
 }
