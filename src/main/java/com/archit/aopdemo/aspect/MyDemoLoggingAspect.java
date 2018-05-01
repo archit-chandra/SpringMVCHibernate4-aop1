@@ -2,17 +2,21 @@ package com.archit.aopdemo.aspect;
 
 import com.archit.aopdemo.Account;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @Aspect
 @Component
 @Order(2)
 public class MyDemoLoggingAspect {
+
+    private Logger logger = Logger.getLogger(getClass().getName());
 
     /**
      * execution pointcut
@@ -31,23 +35,23 @@ public class MyDemoLoggingAspect {
     @Before("com.archit.aopdemo.aspect.CommonAopPointcutExpressions" +
             ".forDaoPackageNoGetterSetter()")
     public void beforeAddAccountAdvice(JoinPoint joinPoint) {
-        System.out.println("\n====>>>> executing @Before advice on method");
+        logger.info("\n====>>>> executing @Before advice on method");
 
         // display method signature
         MethodSignature methodSignature = (MethodSignature) joinPoint
                 .getSignature();
-        System.out.println("MethodSignature :" + methodSignature);
+        logger.info("MethodSignature :" + methodSignature);
 
         // display method arguments
         Object[] args = joinPoint.getArgs();
         for (Object arg : args) {
-            System.out.println(arg);
+            logger.info(arg.toString());
             if (arg instanceof Account) {
                 // downcast and print Account specific stuff
                 // since not overridden toString here
                 Account account = (Account) arg;
-                System.out.println("account name: " + account.getName());
-                System.out.println("account level: " + account.getLevel());
+                logger.info("account name: " + account.getName());
+                logger.info("account level: " + account.getLevel());
             }
         }
     }
@@ -61,16 +65,16 @@ public class MyDemoLoggingAspect {
 
         // print the method that is being advised
         String method = joinPoint.getSignature().toShortString();
-        System.out.println("\n====>>>> executing @AfterReturning on method : " +
+        logger.info("\n====>>>> executing @AfterReturning on method : " +
                 "" + method);
 
         // print result of the method call
-        System.out.println("\n====>>>> result is : " + result);
+        logger.info("\n====>>>> result is : " + result);
 
         // post-process the data (modifying data)
         convertAccountNamesToUpperCase(result);
 
-        System.out.println("\n====>>>> result is : " + result);
+        logger.info("\n====>>>> result is : " + result);
 
     }
 
@@ -91,10 +95,10 @@ public class MyDemoLoggingAspect {
 
         // print the method that is being advised
         String method = joinPoint.getSignature().toShortString();
-        System.out.println("\n====>>>> executing @AfterThrowing on method : " + method);
+        logger.info("\n====>>>> executing @AfterThrowing on method : " + method);
 
         // log the exception
-        System.out.println("\n====>>>> The exception is : " + theExc);
+        logger.info("\n====>>>> The exception is : " + theExc);
     }
 
     /**
@@ -109,7 +113,61 @@ public class MyDemoLoggingAspect {
 
         // print the method that is being advised
         String method = joinPoint.getSignature().toShortString();
-        System.out.println("\n====>>>> executing @After (finally) on method :" + method);
+        logger.info("\n====>>>> executing @After (finally) on method :" + method);
+    }
+
+    /**
+     * @Around advice runs before and after method execution
+     * @Around = @Before + @After + more fine-grained
+     * @Around advice can swallow the exception i.e. exception won't be propagated back to main application
+     */
+    @Around("execution(* com.archit.aopdemo.service.*.getFortune(..))")
+    public Object aroundGetFortune(ProceedingJoinPoint proceedingJoinPoint)
+            throws Throwable {
+
+        // print the method that is being advised
+        String method = proceedingJoinPoint.getSignature().toShortString();
+        logger.info("\n====>>>> executing @Around advice on method :" + method);
+
+        // get begin timestamp
+        long begin = System.currentTimeMillis();
+
+        // execute the method
+        Object result = null;
+
+        // 1. handling exception
+
+        /*try {
+            result = proceedingJoinPoint.proceed();
+        } catch (Exception e) {
+            // log the exception
+            logger.warning(e.getMessage());
+
+            // give a custome fortune
+            result = "Major accident! But no worries, sending helicopter";
+        }*/
+
+        // 2. Rethrow the exception & let the calling program decides how to
+        // handle it
+
+        try {
+            result = proceedingJoinPoint.proceed();
+        } catch (Exception e) {
+            // log the exception
+            logger.warning(e.getMessage());
+
+            // rethrowing exception
+            throw e;
+        }
+
+
+        //get end timestamp
+        long end = System.currentTimeMillis();
+
+        // compute the duration & display it
+        long duration = end - begin;
+        logger.info("\n====>>>> duration : " + duration / 1000.0 + "seconds");
+        return result;
     }
 
 
