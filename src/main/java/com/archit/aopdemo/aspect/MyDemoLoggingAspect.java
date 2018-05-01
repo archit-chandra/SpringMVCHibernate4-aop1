@@ -9,11 +9,14 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @Aspect
 @Component
 @Order(2)
 public class MyDemoLoggingAspect {
+
+    private Logger logger = Logger.getLogger(getClass().getName());
 
     /**
      * execution pointcut
@@ -32,23 +35,23 @@ public class MyDemoLoggingAspect {
     @Before("com.archit.aopdemo.aspect.CommonAopPointcutExpressions" +
             ".forDaoPackageNoGetterSetter()")
     public void beforeAddAccountAdvice(JoinPoint joinPoint) {
-        System.out.println("\n====>>>> executing @Before advice on method");
+        logger.info("\n====>>>> executing @Before advice on method");
 
         // display method signature
         MethodSignature methodSignature = (MethodSignature) joinPoint
                 .getSignature();
-        System.out.println("MethodSignature :" + methodSignature);
+        logger.info("MethodSignature :" + methodSignature);
 
         // display method arguments
         Object[] args = joinPoint.getArgs();
         for (Object arg : args) {
-            System.out.println(arg);
+            logger.info(arg.toString());
             if (arg instanceof Account) {
                 // downcast and print Account specific stuff
                 // since not overridden toString here
                 Account account = (Account) arg;
-                System.out.println("account name: " + account.getName());
-                System.out.println("account level: " + account.getLevel());
+                logger.info("account name: " + account.getName());
+                logger.info("account level: " + account.getLevel());
             }
         }
     }
@@ -62,16 +65,16 @@ public class MyDemoLoggingAspect {
 
         // print the method that is being advised
         String method = joinPoint.getSignature().toShortString();
-        System.out.println("\n====>>>> executing @AfterReturning on method : " +
+        logger.info("\n====>>>> executing @AfterReturning on method : " +
                 "" + method);
 
         // print result of the method call
-        System.out.println("\n====>>>> result is : " + result);
+        logger.info("\n====>>>> result is : " + result);
 
         // post-process the data (modifying data)
         convertAccountNamesToUpperCase(result);
 
-        System.out.println("\n====>>>> result is : " + result);
+        logger.info("\n====>>>> result is : " + result);
 
     }
 
@@ -92,10 +95,10 @@ public class MyDemoLoggingAspect {
 
         // print the method that is being advised
         String method = joinPoint.getSignature().toShortString();
-        System.out.println("\n====>>>> executing @AfterThrowing on method : " + method);
+        logger.info("\n====>>>> executing @AfterThrowing on method : " + method);
 
         // log the exception
-        System.out.println("\n====>>>> The exception is : " + theExc);
+        logger.info("\n====>>>> The exception is : " + theExc);
     }
 
     /**
@@ -110,7 +113,7 @@ public class MyDemoLoggingAspect {
 
         // print the method that is being advised
         String method = joinPoint.getSignature().toShortString();
-        System.out.println("\n====>>>> executing @After (finally) on method :" + method);
+        logger.info("\n====>>>> executing @After (finally) on method :" + method);
     }
 
     /**
@@ -124,7 +127,7 @@ public class MyDemoLoggingAspect {
 
         // print the method that is being advised
         String method = proceedingJoinPoint.getSignature().toShortString();
-        System.out.println("\n====>>>> executing @Around advice on method :" + method);
+        logger.info("\n====>>>> executing @Around advice on method :" + method);
 
         // get begin timestamp
         long begin = System.currentTimeMillis();
@@ -137,7 +140,7 @@ public class MyDemoLoggingAspect {
 
         // compute the duration & display it
         long duration = end - begin;
-        System.out.println("\n====>>>> duration : " + duration / 1000.0 + "seconds");
+        logger.info("\n====>>>> duration : " + duration / 1000.0 + "seconds");
         return result;
     }
 
