@@ -17,7 +17,8 @@ public class AfterReturningDemoApp {
         AccountDAO accountDAO = context.getBean("accountDAO", AccountDAO.class);
 
         // call AccountDAO business method(s)
-        List<Account> accounts = accountDAO.findAccounts();
+        boolean tripWire = false;
+        List<Account> accounts = accountDAO.findAccounts(tripWire);
         System.out.println("\n\nMain Program: AfterReturningDemoApp");
         System.out.println("--------------------------------------");
         System.out.println(accounts);
