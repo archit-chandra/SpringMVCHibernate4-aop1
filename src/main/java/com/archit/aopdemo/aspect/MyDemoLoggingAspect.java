@@ -3,6 +3,7 @@ package com.archit.aopdemo.aspect;
 import com.archit.aopdemo.Account;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -28,8 +29,6 @@ public class MyDemoLoggingAspect {
      * 3. (..) -> method with 0 or more argument of any type
      */
 
-
-    // add all advices for logging
 
     // @Before advice : pointcut expression : match method in a package
     @Before("com.archit.aopdemo.aspect.CommonAopPointcutExpressions" +
@@ -84,4 +83,21 @@ public class MyDemoLoggingAspect {
             account.setName(upperName);
         }
     }
+
+    // @AfterThrowing advice on findAccounts method
+    @AfterThrowing(
+            pointcut = "execution(* com.archit.aopdemo.dao.AccountDAO.findAccounts(..))",
+            throwing = "theExc"
+    )
+    public void afterThrowingFindAccountsAdvice(JoinPoint joinPoint,
+                                                Throwable theExc) {
+
+        // print the method that is being advised
+        String method = joinPoint.getSignature().toShortString();
+        System.out.println("\n====>>>> executing @AfterThrowing on method : " + method);
+
+        // log the exception
+        System.out.println("\n====>>>> The exception is : " + theExc);
+    }
+
 }
