@@ -2,10 +2,7 @@ package com.archit.aopdemo.aspect;
 
 import com.archit.aopdemo.Account;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -99,5 +96,21 @@ public class MyDemoLoggingAspect {
         // log the exception
         System.out.println("\n====>>>> The exception is : " + theExc);
     }
+
+    /**
+     * @After (finally) will always run regardless of success or exception of
+     * that method
+     * @After will execute before @AfterThrowing advice
+     * @After does not have access to the exception (independent of exception or success)
+     */
+    // @After advice on findAccounts method
+    @After("execution(* com.archit.aopdemo.dao.AccountDAO.findAccounts(..))")
+    public void afterFinallyFindAccountsAdvice(JoinPoint joinPoint) {
+
+        // print the method that is being advised
+        String method = joinPoint.getSignature().toShortString();
+        System.out.println("\n====>>>> executing @After (finally) on method :" + method);
+    }
+
 
 }
