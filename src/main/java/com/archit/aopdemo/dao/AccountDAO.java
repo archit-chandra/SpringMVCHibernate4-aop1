@@ -22,7 +22,13 @@ public class AccountDAO {
         return false;
     }
 
-    public List<Account> findAccounts() {
+    public List<Account> findAccounts(boolean tripWire) {
+
+        // for academic pupose ... simulating an exception in the method
+        if (tripWire) {
+            throw new RuntimeException("No soup for you!!!");
+        }
+
         List<Account> accounts = new ArrayList<Account>();
         Account temp1 = new Account("John", "Silver");
         Account temp2 = new Account("Madhu", "Platinum");
