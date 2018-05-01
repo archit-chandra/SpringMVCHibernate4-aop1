@@ -2,6 +2,7 @@ package com.archit.aopdemo.aspect;
 
 import com.archit.aopdemo.Account;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.Order;
@@ -110,6 +111,34 @@ public class MyDemoLoggingAspect {
         // print the method that is being advised
         String method = joinPoint.getSignature().toShortString();
         System.out.println("\n====>>>> executing @After (finally) on method :" + method);
+    }
+
+    /**
+     * @Around advice runs before and after method execution
+     * @Around = @Before + @After + more fine-grained
+     * @Around advice can swallow the exception i.e. exception won't be propagated back to main application
+     */
+    @Around("execution(* com.archit.aopdemo.service.*.getFortune(..))")
+    public Object aroundGetFortune(ProceedingJoinPoint proceedingJoinPoint)
+            throws Throwable {
+
+        // print the method that is being advised
+        String method = proceedingJoinPoint.getSignature().toShortString();
+        System.out.println("\n====>>>> executing @Around advice on method :" + method);
+
+        // get begin timestamp
+        long begin = System.currentTimeMillis();
+
+        // execute the method
+        Object result = proceedingJoinPoint.proceed();
+
+        //get end timestamp
+        long end = System.currentTimeMillis();
+
+        // compute the duration & display it
+        long duration = end - begin;
+        System.out.println("\n====>>>> duration : " + duration / 1000.0 + "seconds");
+        return result;
     }
 
 
