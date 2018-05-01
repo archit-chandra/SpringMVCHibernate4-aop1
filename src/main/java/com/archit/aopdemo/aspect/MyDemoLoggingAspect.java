@@ -134,7 +134,10 @@ public class MyDemoLoggingAspect {
 
         // execute the method
         Object result = null;
-        try {
+
+        // 1. handling exception
+
+        /*try {
             result = proceedingJoinPoint.proceed();
         } catch (Exception e) {
             // log the exception
@@ -142,7 +145,21 @@ public class MyDemoLoggingAspect {
 
             // give a custome fortune
             result = "Major accident! But no worries, sending helicopter";
+        }*/
+
+        // 2. Rethrow the exception & let the calling program decides how to
+        // handle it
+
+        try {
+            result = proceedingJoinPoint.proceed();
+        } catch (Exception e) {
+            // log the exception
+            logger.warning(e.getMessage());
+
+            // rethrowing exception
+            throw e;
         }
+
 
         //get end timestamp
         long end = System.currentTimeMillis();
